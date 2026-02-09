@@ -1,0 +1,26 @@
+/* Importer les styles de login pour la cohérence */
+@import './login.css';
+
+/* Styles spécifiques pour le register si nécessaire */
+.register-container {
+  max-width: 500px;
+}
+
+.register-header .logo-circle {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+/* Animation différente pour le logo du register */
+.register-header .logo-circle {
+  animation: pulse-rotate 3s ease-in-out infinite;
+}
+
+@keyframes pulse-rotate {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(10deg) scale(1.1);
+  }
+}

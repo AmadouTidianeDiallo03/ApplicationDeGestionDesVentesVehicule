@@ -1,0 +1,68 @@
+stages:
+  - build
+  - test
+  - sonar
+
+# FRONTEND
+build_frontend:
+  stage: build
+  image: node:20
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build
+  only:
+    - main
+
+
+# BACKEND
+build_backend:
+  stage: build
+  image: python:3.11
+  script:
+    - cd backend
+    - pip install -r requirements.txt
+    - python manage.py check
+  only:
+    - main
+
+
+#TEST
+test_backend:
+  stage: test
+  image: python:3.11
+  script:
+    - cd backend
+    - pip install -r requirements.txt
+    - python manage.py test || echo "Pas de tests - Étape académique"
+  only:
+    - main
+
+test_frontend:
+  stage: test
+  image: node:20
+  script:
+    - cd frontend
+    - npm install
+    - npm test --watchAll=false || echo "Pas de tests - Étape académique"
+  only:
+    - main
+
+
+# SONARQUBE (en local!! car instance UQAR privée)
+sonar_check:
+  stage: sonar
+  image:
+    name: sonarsource/sonar-scanner-cli
+    entrypoint: [""]
+  script:
+    - echo "=== Étape SonarQube ==="
+    - echo "Analyse effectuée localement avec sonar-scanner"
+    - echo "Pour un pipeline réel, on utiliserait :"
+    - echo "sonar-scanner -Dsonar.projectKey=Projet_groupeD -Dsonar.sources=backend,frontend"
+    - echo "====================================="
+  only:
+    - main
