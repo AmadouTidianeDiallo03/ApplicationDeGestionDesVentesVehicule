@@ -10,7 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from django.core.management.utils import get_random_secret_key
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'g46qdar20-m&c5xtc6bsfud%g4sdij8(6@yu-g5)x2idt_hdr9'
+# La clé est lue depuis le fichier .env (DJANGO_SECRET_KEY), jamais écrite dans le code.
+# En développement, une clé temporaire est générée si elle n'est pas définie.
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY') or get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -76,10 +84,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 DATABASES = {
     'default': {
